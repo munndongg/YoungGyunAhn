@@ -1,10 +1,19 @@
-- 👋 Hi, I’m @YoungGyunAhn
-- 👀 I’m interested in Automotive Engineering
-- 🌱 I’m currently learning Automotive Engineering -> Control System, Vehicle Dynamics...
-- 💞️ I’m looking to collaborate on Vehicle Engineers
-- 📫 How to reach me ...
+#include <Servo.h>      //태양광 트래커 초기 세팅값
 
-<!---
-YoungGyunAhn/YoungGyunAhn is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+#define   PIN_BASE    9
+#define   PIN_HEAD    10
+#define   ANGLE_BASEPOINT   90
+
+Servo base,head;
+
+void setup() {
+  base.attach(PIN_BASE);
+  head.attach(PIN_HEAD);
+}
+
+void loop() {
+  base.write(ANGLE_BASEPOINT);
+  head.write(ANGLE_BASEPOINT);
+  delay(50);
+  
+}
