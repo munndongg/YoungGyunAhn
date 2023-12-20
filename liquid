@@ -1,0 +1,63 @@
+#include <LiquidCrystal_I2C.h> /* 확인하는 거 */  
+#include <SoftwareSerial.h>   /* bluetooth */
+
+#define pinTrig 3
+#define pinEcho 2
+
+SoftwareSerial swSerial(7, 6); //RX, TX
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+double measureDistanceCm(){
+// The sensor is triggered by a HIGH pulse of 10 or more microseconds.
+// Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
+digitalWrite(pinTrig, LOW);
+delayMicroseconds (5);
+digitalWrite(pinTrig, HIGH);
+delayMicroseconds (10); 
+digitalWrite(pinTrig, LOW);
+
+// Read the signal from the sensor: a HIGH pulse whose 
+// duration is the time (in microseconds) from the sending
+
+double duration = pulseIn(pinEcho, HIGH);
+
+//Convert the time into a distance
+//: Sound travels 343 m/s = 34308 cm/s == or 0.0343 cm/ms
+
+double cm = (duration/2) * 0.0343;
+return cm;
+}
+
+void setup() {
+  swSerial.begin(9600);
+  Serial.begin(9600);
+
+  lcd.init();
+  lcd.blink_on();
+  lcd.backlight();
+  lcd.setCursor(1, 0);
+  lcd.print("Hello World");
+
+  //pins for the sensor
+  pinMode(pinTrig, OUTPUT);
+  pinMode(pinEcho, INPUT);
+}
+
+void loop(){
+  double distance = measureDistanceCm();
+
+  String msg_line = String(distance, 1);
+  Serial.println(msg_line);
+  lcd.setCursor(1, 0);
+  lcd.print(msg_line);
+
+  //For debugging
+  Serial.write(msg_line.c_str());
+  Serial.write('/n');
+
+  //Transmit to another Arduino
+  swSerial.write()msg_line.c_str());
+  Serial.write('/n');
+  
+  delay(1000);
+}
